@@ -1,122 +1,66 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
+import { useState, type ReactNode } from 'react'
+import {
+  BarChart3,
+  Check,
+  CheckCircle2,
+  ClipboardList,
+  Download,
+  ExternalLink,
+  Menu,
+  Repeat2,
+  ShieldAlert,
+  Trophy,
+  X,
+} from 'lucide-react'
 import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
+const apkDownloadUrl = import.meta.env.VITE_APK_DOWNLOAD_URL?.trim() || ''
 
-  return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+type ButtonProps = { children: ReactNode; variant?: 'primary' | 'secondary'; href?: string; onClick?: () => void }
 
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+function Button({ children, variant = 'primary', href, onClick }: ButtonProps) {
+  const className = `inline-flex min-h-14 items-center justify-center gap-2 rounded-full px-6 text-base font-bold transition duration-200 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#A6FF78] sm:px-7 ${variant === 'primary' ? 'bg-[#A6FF78] text-[#17321d] shadow-[0_12px_28px_rgba(166,255,120,0.18)] hover:-translate-y-0.5 hover:bg-[#b5ff91]' : 'border border-[#355E3B]/20 bg-white text-[#234229] hover:border-[#355E3B]/50 hover:bg-[#f7faf4]'}`
+  return href ? <a className={className} href={href}>{children}</a> : <button className={className} onClick={onClick} type="button">{children}</button>
 }
+
+function DownloadButton({ children }: { children: ReactNode }) {
+  const className = `inline-flex min-h-14 items-center justify-center gap-2 rounded-full px-6 text-base font-bold transition duration-200 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#A6FF78] sm:px-7 ${apkDownloadUrl ? 'bg-[#A6FF78] text-[#17321d] shadow-[0_12px_28px_rgba(166,255,120,0.18)] hover:-translate-y-0.5 hover:bg-[#b5ff91]' : 'cursor-not-allowed bg-[#A6FF78]/55 text-[#17321d]/70'}`
+  return apkDownloadUrl ? <a className={className} href={apkDownloadUrl} target="_blank" rel="noreferrer">{children}<ExternalLink size={17} aria-hidden="true" /></a> : <button className={className} type="button" disabled aria-disabled="true" title="O link de download ainda não foi configurado">{children}<Download size={17} aria-hidden="true" /></button>
+}
+
+function Header() {
+  const [menuOpen, setMenuOpen] = useState(false)
+  const closeMenu = () => setMenuOpen(false)
+  return <header className="relative z-20 border-b border-[#355E3B]/10 bg-[#F5F6F1]/85 backdrop-blur-md"><div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-5 sm:px-8 lg:px-12"><a className="text-2xl font-extrabold tracking-[-0.06em] text-[#355E3B]" href="#inicio" aria-label="firme. início">firme.</a><nav className="hidden items-center gap-9 md:flex" aria-label="Navegação principal"><a className="text-sm font-semibold text-[#355E3B]/75 transition hover:text-[#355E3B]" href="#beneficios">Benefícios</a><a className="text-sm font-semibold text-[#355E3B]/75 transition hover:text-[#355E3B]" href="#instalacao">Como instalar</a><DownloadButton>Baixar grátis</DownloadButton></nav><button className="rounded-full p-2 text-[#355E3B] transition hover:bg-white md:hidden" type="button" aria-label={menuOpen ? 'Fechar menu' : 'Abrir menu'} aria-expanded={menuOpen} onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X size={24} /> : <Menu size={24} />}</button></div>{menuOpen && <nav className="absolute inset-x-4 top-[calc(100%-0.25rem)] rounded-3xl border border-[#355E3B]/10 bg-white p-4 shadow-xl md:hidden" aria-label="Menu mobile"><a className="block rounded-2xl px-4 py-3 font-semibold text-[#355E3B] hover:bg-[#F5F6F1]" href="#beneficios" onClick={closeMenu}>Benefícios</a><a className="block rounded-2xl px-4 py-3 font-semibold text-[#355E3B] hover:bg-[#F5F6F1]" href="#instalacao" onClick={closeMenu}>Como instalar</a><div className="p-2"><DownloadButton>Baixar grátis</DownloadButton></div></nav>}</header>
+}
+
+type PhoneMockupProps = { imageSrc?: string }
+function PhoneMockup({ imageSrc }: PhoneMockupProps) {
+  return <div className="phone-float relative mx-auto w-[min(68vw,290px)] sm:w-[290px]" aria-label="Prévia do aplicativo Firme"><div className="absolute -inset-10 rounded-full bg-[#A6FF78]/20 blur-3xl" aria-hidden="true" /><div className="relative rounded-[2.75rem] border-[7px] border-[#17321d] bg-[#17321d] p-2 shadow-[0_30px_70px_rgba(32,61,37,0.28)]"><div className="relative aspect-[9/19] overflow-hidden rounded-[2.1rem] bg-[#F5F6F1]"><div className="absolute left-1/2 top-2 z-10 h-5 w-24 -translate-x-1/2 rounded-full bg-[#17321d]" aria-hidden="true" />{imageSrc ? <img className="h-full w-full object-cover" src={imageSrc} alt="Tela do aplicativo Firme" width="290" height="611" /> : <div className="flex h-full flex-col px-5 pb-7 pt-12 text-left text-[#355E3B]" role="img" aria-label="Espaço reservado para uma captura real do aplicativo Firme"><div className="mb-8 flex items-center justify-between"><span className="text-sm font-bold">firme.</span><span className="h-8 w-8 rounded-full bg-[#A6FF78]" /></div><p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#355E3B]/50">Seu progresso</p><p className="mt-1 text-3xl font-extrabold tracking-[-0.06em]">em movimento.</p><div className="mt-6 rounded-2xl bg-white p-4 shadow-sm"><div className="mb-3 flex justify-between text-xs font-bold"><span>Treino da semana</span><span>72%</span></div><div className="h-2 rounded-full bg-[#e6eee3]"><div className="h-2 w-[72%] rounded-full bg-[#355E3B]" /></div></div><div className="mt-auto rounded-2xl bg-[#355E3B] p-4 text-white"><div className="mb-5 flex items-center justify-between"><span className="text-xs font-semibold text-white/65">Próximo treino</span><span className="text-xs">Hoje</span></div><span className="text-lg font-bold">Treino A</span><div className="mt-3 flex items-center gap-2 text-xs text-white/70"><span className="h-1.5 w-1.5 rounded-full bg-[#A6FF78]" /> 6 exercícios</div></div></div>}</div></div><div className="absolute -bottom-5 -left-8 hidden rounded-2xl border border-[#355E3B]/10 bg-white px-4 py-3 shadow-lg sm:block"><div className="flex items-center gap-2 text-xs font-bold text-[#355E3B]"><span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#A6FF78]"><Check size={14} /></span> Evolução consistente</div></div></div>
+}
+
+const benefits = [{ icon: ClipboardList, title: 'Organize seus treinos.', text: 'Mais clareza para transformar intenção em rotina.' }, { icon: Trophy, title: 'Registre cada conquista.', text: 'Perceba o valor de cada passo dado no caminho.' }, { icon: BarChart3, title: 'Acompanhe sua evolução.', text: 'Tenha uma visão mais clara do seu próprio ritmo.' }, { icon: Repeat2, title: 'Mantenha a consistência.', text: 'Volte para o que importa e siga firme, um treino por vez.' }]
+function BenefitsSection() { return <section id="beneficios" className="border-t border-[#355E3B]/10 bg-white/60 px-5 py-20 sm:px-8 lg:px-12 lg:py-28" aria-labelledby="benefits-title"><div className="mx-auto max-w-7xl"><p className="text-xs font-bold uppercase tracking-[0.18em] text-[#355E3B]/55">Para seguir no seu ritmo</p><h2 id="benefits-title" className="mt-3 max-w-2xl text-4xl font-extrabold leading-tight tracking-[-0.06em] text-[#234229] sm:text-5xl">Tudo que você precisa para seguir firme.</h2><div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{benefits.map(({ icon: Icon, title, text }) => <article className="rounded-3xl border border-[#355E3B]/10 bg-[#F5F6F1] p-6 transition duration-200 hover:-translate-y-1 hover:border-[#355E3B]/25" key={title}><span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#A6FF78]/60 text-[#355E3B]"><Icon size={21} strokeWidth={2} aria-hidden="true" /></span><h3 className="mt-8 font-bold text-[#234229]">{title}</h3><p className="mt-2 text-sm leading-6 text-[#355E3B]/65">{text}</p></article>)}</div></div></section> }
+
+const steps = [{ number: '01', icon: Download, title: 'Baixe o Firme gratuitamente.', text: 'Comece sem mensalidade, cartão de crédito ou complicação.' }, { number: '02', icon: ClipboardList, title: 'Organize seu plano de treino.', text: 'Deixe sua rotina mais clara e pronta para o seu momento.' }, { number: '03', icon: BarChart3, title: 'Registre e acompanhe sua evolução.', text: 'Observe seu caminho e continue avançando no seu ritmo.' }]
+function HowItWorks() { return <section id="como-funciona" className="mx-auto max-w-7xl px-5 py-20 sm:px-8 lg:px-12 lg:py-28" aria-labelledby="steps-title"><div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-24"><div><p className="text-xs font-bold uppercase tracking-[0.18em] text-[#355E3B]/55">Sem complicação</p><h2 id="steps-title" className="mt-3 max-w-md text-4xl font-extrabold leading-tight tracking-[-0.06em] text-[#234229] sm:text-5xl">Começar é simples.</h2></div><div className="divide-y divide-[#355E3B]/10">{steps.map(({ number, icon: Icon, title, text }) => <article className="grid grid-cols-[3.5rem_1fr] gap-5 py-6 first:pt-0 last:pb-0 sm:grid-cols-[4.5rem_1fr] sm:gap-7" key={number}><span className="text-2xl font-extrabold tracking-[-0.05em] text-[#355E3B]/35">{number}</span><div><span className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-[#355E3B] text-[#A6FF78]"><Icon size={19} aria-hidden="true" /></span><h3 className="font-bold text-[#234229]">{title}</h3><p className="mt-2 max-w-lg text-sm leading-6 text-[#355E3B]/65">{text}</p></div></article>)}</div></div></section> }
+
+type ScreenShowcaseProps = { eyebrow: string; title: string; text: string; imageSrc?: string; reversed?: boolean }
+function ScreenShowcase({ eyebrow, title, text, imageSrc, reversed = false }: ScreenShowcaseProps) { return <article className={`grid items-center gap-10 rounded-[2rem] border border-[#355E3B]/10 bg-white/70 p-6 sm:p-10 lg:grid-cols-2 lg:gap-16 ${reversed ? 'lg:[&>*:first-child]:order-2' : ''}`}><div className="mx-auto flex min-h-[22rem] w-full max-w-[21rem] items-center justify-center rounded-[1.5rem] border border-dashed border-[#355E3B]/25 bg-[#F5F6F1] p-5 text-center"><div>{imageSrc ? <img className="max-h-[26rem] rounded-xl object-contain" src={imageSrc} alt={title} width="320" height="568" loading="lazy" /> : <><div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-[#355E3B]/50 shadow-sm"><Download size={20} aria-hidden="true" /></div><p className="mt-4 text-sm font-bold text-[#355E3B]">Captura pendente</p><p className="mt-1 text-xs leading-5 text-[#355E3B]/55">Adicione a imagem real em<br /><code className="text-[11px]">/public/screenshots/</code></p></>}</div></div><div className="max-w-md"><p className="text-xs font-bold uppercase tracking-[0.18em] text-[#355E3B]/55">{eyebrow}</p><h3 className="mt-3 text-3xl font-extrabold leading-tight tracking-[-0.05em] text-[#234229]">{title}</h3><p className="mt-4 leading-7 text-[#355E3B]/70">{text}</p></div></article> }
+function ScreensSection() { return <section id="telas" className="border-t border-[#355E3B]/10 bg-[#eef1e9]/55 px-5 py-20 sm:px-8 lg:px-12 lg:py-28" aria-labelledby="screens-title"><div className="mx-auto max-w-7xl"><p className="text-xs font-bold uppercase tracking-[0.18em] text-[#355E3B]/55">Dentro do Firme</p><h2 id="screens-title" className="mt-3 max-w-2xl text-4xl font-extrabold leading-tight tracking-[-0.06em] text-[#234229] sm:text-5xl">Uma experiência feita para acompanhar você.</h2><div className="mt-12 grid gap-6"><ScreenShowcase eyebrow="Sua rotina" title="Tudo mais claro para o próximo treino." text="Quando as capturas reais estiverem disponíveis, elas entram aqui para mostrar a experiência do Firme com transparência." /><ScreenShowcase eyebrow="Seu caminho" title="Evolução que você consegue enxergar." text="Este espaço está preparado para receber a tela real de acompanhamento do aplicativo, sem criar uma interface fictícia." reversed /></div></div></section> }
+
+function FreeSection() { const highlights = ['100% gratuito', 'Sem assinatura', 'Sem cartão de crédito', 'Sem cobrança para começar']; return <section id="gratuito" className="px-5 py-20 sm:px-8 lg:px-12 lg:py-28" aria-labelledby="free-title"><div className="mx-auto grid max-w-7xl items-center gap-10 rounded-[2rem] bg-[#355E3B] px-6 py-12 text-white sm:px-12 lg:grid-cols-[1fr_auto] lg:px-16 lg:py-16"><div><p className="text-xs font-bold uppercase tracking-[0.18em] text-[#A6FF78]">Acesso simples</p><h2 id="free-title" className="mt-3 max-w-xl text-4xl font-extrabold leading-tight tracking-[-0.06em] sm:text-5xl">Seu progresso não precisa de assinatura.</h2><p className="mt-5 max-w-xl leading-7 text-white/70">O Firme é gratuito. Sem mensalidade, sem cartão de crédito e sem recursos bloqueados por um plano pago.</p></div><ul className="grid gap-3 text-sm font-semibold text-white/90 sm:grid-cols-2 lg:grid-cols-1" aria-label="Destaques da gratuidade">{highlights.map((highlight) => <li className="flex items-center gap-3" key={highlight}><CheckCircle2 size={18} className="shrink-0 text-[#A6FF78]" aria-hidden="true" />{highlight}</li>)}</ul></div></section> }
+
+function DownloadSection() { return <section id="download" className="mx-auto max-w-7xl scroll-mt-6 px-5 py-20 sm:px-8 lg:px-12 lg:py-28" aria-labelledby="download-title"><div className="rounded-[2rem] bg-[#234229] px-6 py-14 text-center text-white sm:px-12"><p className="text-xs font-bold uppercase tracking-[0.18em] text-[#A6FF78]">Download oficial</p><h2 id="download-title" className="mx-auto mt-3 max-w-xl text-4xl font-extrabold tracking-[-0.06em] sm:text-5xl">Baixe grátis. Comece hoje.</h2><p className="mx-auto mt-4 max-w-md text-white/70">Instale o Firme no seu Android e tenha seus treinos sempre à mão.</p><div className="mt-8"><DownloadButton>Baixar APK para Android</DownloadButton></div><ul className="mx-auto mt-8 flex max-w-xl flex-wrap justify-center gap-x-5 gap-y-2 text-sm font-semibold text-white/70"><li>Android</li><li>Download gratuito</li><li>Sem cartão de crédito</li><li>Sem assinatura</li></ul>{!apkDownloadUrl && <p className="mx-auto mt-6 max-w-md text-sm leading-6 text-[#A6FF78]" role="status" aria-live="polite">O download ainda não está disponível. O link oficial será configurado em breve.</p>}</div></section> }
+
+const installSteps = ['Toque em “Baixar APK para Android”.', 'No Google Drive, escolha a opção de download do arquivo.', 'Abra o APK baixado no dispositivo Android.', 'Se o Android solicitar autorização para instalar aplicativos dessa origem, revise a solicitação e autorize a instalação nas configurações do sistema.', 'Conclua a instalação e abra o Firme.']
+function InstallationSection() { return <section id="instalacao" className="border-t border-[#355E3B]/10 bg-white/60 px-5 py-20 sm:px-8 lg:px-12 lg:py-28" aria-labelledby="installation-title"><div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.75fr_1.25fr] lg:gap-24"><div><p className="text-xs font-bold uppercase tracking-[0.18em] text-[#355E3B]/55">Depois do download</p><h2 id="installation-title" className="mt-3 max-w-md text-4xl font-extrabold leading-tight tracking-[-0.06em] text-[#234229] sm:text-5xl">Como instalar o APK.</h2><div className="mt-8 flex gap-3 rounded-2xl border border-[#355E3B]/15 bg-[#F5F6F1] p-4 text-sm leading-6 text-[#355E3B]/70"><ShieldAlert className="mt-0.5 shrink-0 text-[#355E3B]" size={20} aria-hidden="true" /><p>Como o Firme ainda é distribuído fora da Play Store, o Android pode exibir avisos de segurança. Confira se o arquivo foi obtido pelo link oficial antes de prosseguir.</p></div></div><ol className="space-y-3">{installSteps.map((step, index) => <li className="flex gap-4 rounded-2xl border border-[#355E3B]/10 bg-[#F5F6F1] p-5" key={step}><span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#355E3B] text-sm font-extrabold text-[#A6FF78]">{String(index + 1).padStart(2, '0')}</span><span className="pt-1 text-sm font-semibold leading-6 text-[#234229]">{step}</span></li>)}</ol></div></section> }
+
+const faqs = [{ question: 'O Firme é realmente gratuito?', answer: 'Sim. Atualmente o Firme é 100% gratuito, sem assinatura e sem cartão de crédito. A proposta do projeto é permanecer gratuito.' }, { question: 'Preciso informar um cartão de crédito?', answer: 'Não.' }, { question: 'O aplicativo funciona no iPhone?', answer: 'A distribuição desta landing é destinada ao Android. Não há uma versão para iPhone confirmada nesta página.' }, { question: 'Por que o download é feito pelo Google Drive?', answer: 'Porque o APK está sendo disponibilizado diretamente enquanto o aplicativo ainda não é distribuído pela Play Store.' }, { question: 'Como atualizo o aplicativo?', answer: 'Novas versões serão disponibilizadas pelo canal oficial de download. O processo dependerá do APK publicado; não há atualização automática definida nesta landing.' }]
+function FaqSection() { return <section id="faq" className="mx-auto max-w-4xl px-5 py-20 sm:px-8 lg:py-28" aria-labelledby="faq-title"><p className="text-center text-xs font-bold uppercase tracking-[0.18em] text-[#355E3B]/55">Dúvidas comuns</p><h2 id="faq-title" className="mt-3 text-center text-4xl font-extrabold tracking-[-0.06em] text-[#234229] sm:text-5xl">Perguntas frequentes.</h2><div className="mt-10 divide-y divide-[#355E3B]/15 border-y border-[#355E3B]/15">{faqs.map(({ question, answer }) => <details className="group py-5" key={question}><summary className="flex cursor-pointer list-none items-center justify-between gap-5 font-bold text-[#234229] outline-none marker:hidden focus-visible:ring-2 focus-visible:ring-[#355E3B] focus-visible:ring-offset-4"><span>{question}</span><span className="text-2xl font-normal text-[#355E3B]/50 transition group-open:rotate-45" aria-hidden="true">+</span></summary><p className="max-w-2xl pt-4 text-sm leading-7 text-[#355E3B]/70">{answer}</p></details>)}</div></section> }
+
+function Footer() { return <footer className="border-t border-[#355E3B]/10 bg-white/45 px-5 py-10 sm:px-8 lg:px-12"><div className="mx-auto flex max-w-7xl flex-col gap-8 sm:flex-row sm:items-end sm:justify-between"><div><a className="text-2xl font-extrabold tracking-[-0.06em] text-[#355E3B]" href="#inicio">firme.</a><p className="mt-2 text-sm text-[#355E3B]/60">Seu treino. Sua evolução.</p></div><nav className="flex flex-wrap items-center gap-x-5 gap-y-3 text-sm font-semibold text-[#355E3B]/70" aria-label="Links do rodapé"><a className="hover:text-[#355E3B]" href="#beneficios">Funcionalidades</a><a className="hover:text-[#355E3B]" href="#instalacao">Como instalar</a><a className="hover:text-[#355E3B]" href="#faq">FAQ</a><DownloadButton>Baixar o Firme</DownloadButton></nav></div><p className="mx-auto mt-8 max-w-7xl border-t border-[#355E3B]/10 pt-5 text-xs text-[#355E3B]/45">© {new Date().getFullYear()} firme. Todos os direitos reservados.</p></footer> }
+
+function App() { return <div className="min-h-screen overflow-hidden bg-[#F5F6F1] text-[#1f2b22]"><Header /><main id="inicio"><section className="relative mx-auto max-w-7xl px-5 pb-20 pt-14 sm:px-8 sm:pb-28 sm:pt-20 lg:px-12 lg:pb-32 lg:pt-24" aria-labelledby="hero-title"><div className="pointer-events-none absolute -right-48 -top-48 h-[34rem] w-[34rem] rounded-full bg-[#A6FF78]/10 blur-3xl" aria-hidden="true" /><div className="grid items-center gap-16 lg:grid-cols-[1.02fr_0.98fr] lg:gap-10"><div className="relative z-10 max-w-2xl"><div className="mb-7 inline-flex items-center gap-2 rounded-full border border-[#355E3B]/15 bg-white/70 px-3.5 py-2 text-xs font-bold uppercase tracking-[0.14em] text-[#355E3B]"><span className="h-2 w-2 rounded-full bg-[#A6FF78]" /> Treine do seu jeito</div><h1 id="hero-title" className="max-w-xl text-[clamp(3.2rem,8vw,6.2rem)] font-extrabold leading-[0.94] tracking-[-0.075em] text-[#234229]">Seu treino.<br /><span className="text-[#355E3B]">Sua evolução.</span></h1><p className="mt-7 max-w-lg text-lg leading-8 text-[#355E3B]/70 sm:text-xl">Organize seus treinos, acompanhe seu progresso e evolua no seu ritmo. Tudo em um só aplicativo, sem pagar nada.</p><div className="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap"><DownloadButton>Baixar grátis para Android</DownloadButton><Button variant="secondary" href="#beneficios">Conhecer o Firme</Button></div><p className="mt-5 text-sm font-semibold text-[#355E3B]/55">100% gratuito <span className="mx-1.5 text-[#A6FF78]">·</span> Sem cartão de crédito <span className="mx-1.5 text-[#A6FF78]">·</span> Sem assinatura</p><div className="mt-12 flex items-center gap-3 border-l-2 border-[#A6FF78] pl-4"><span className="text-sm font-extrabold uppercase tracking-[0.1em] text-[#355E3B]">Gratuito hoje.<br />Gratuito sempre.</span><span className="h-px w-12 bg-[#355E3B]/20" aria-hidden="true" /></div></div><div className="relative flex justify-center lg:justify-end lg:pr-12"><PhoneMockup /></div></div></section><BenefitsSection /><HowItWorks /><ScreensSection /><FreeSection /><DownloadSection /><InstallationSection /><FaqSection /></main><Footer /></div> }
 
 export default App

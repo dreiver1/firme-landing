@@ -18,7 +18,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      VITE_APK_DOWNLOAD_URL: ${{ vars.VITE_APK_DOWNLOAD_URL }}
+      VITE_APK_DOWNLOAD_URL: https://drive.google.com/file/d/1f-E6zgQnrzjYPKD2a6T3hd46vhz1J19t/view?usp=sharing
     steps:
       - name: Checkout
         uses: actions/checkout@v4

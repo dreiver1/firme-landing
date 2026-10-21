@@ -14,7 +14,7 @@ import {
 } from 'lucide-react'
 import './App.css'
 
-const apkDownloadUrl = import.meta.env.VITE_APK_DOWNLOAD_URL?.trim() || ''
+const apkDownloadUrl = 'https://drive.google.com/file/d/1f-E6zgQnrzjYPKD2a6T3hd46vhz1J19t/view?usp=sharing'
 
 type ButtonProps = { children: ReactNode; variant?: 'primary' | 'secondary'; href?: string; onClick?: () => void }
 
